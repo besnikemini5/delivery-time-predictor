@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="result">
+    <p class="label">{{ t('estimated_time') }}</p>
+    <p class="big">{{ duration(prediction.minutes) }}</p>
+    <p class="range">{{ t('likely_between', low=duration(prediction.low), high=duration(prediction.high)) }}</p>
+    <p class="muted small">{{ t('range_note') }}</p>
+</div>
+
+<h2>{{ t('conditions') }}</h2>
+<dl class="details">
+    <div><dt>{{ t('distance_km') }}</dt><dd>{{ features.distance_km }}</dd></div>
+    {% for field in ['road_type', 'traffic', 'weather', 'time_of_day', 'package_size'] %}
+    <div><dt>{{ t(field) }}</dt><dd>{{ t(features[field]) }}</dd></div>
+    {% endfor %}
+</dl>
+
+<a class="button" href="{{ url_for('index') }}">{{ t('new_prediction') }}</a>
+{% endblock %}

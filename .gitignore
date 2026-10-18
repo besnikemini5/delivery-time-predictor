@@ -1,0 +1,17 @@
+# Trained model (recreated with: python -m delivery_predictor.training)
+models/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+.env

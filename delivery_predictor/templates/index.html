@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% macro choice(field) %}
+<div class="form-group {{ 'has-error' if errors.get(field) }}">
+    <label for="{{ field }}">{{ t(field) }}</label>
+    <select class="field" id="{{ field }}" name="{{ field }}" required>
+        <option value="" disabled {{ 'selected' if not values.get(field) }}>{{ t('choose') }}</option>
+        {% for option in categories[field] %}
+        <option value="{{ option }}" {{ 'selected' if values.get(field) == option }}>{{ t(option) }}</option>
+        {% endfor %}
+    </select>
+    {% if errors.get(field) %}<p class="field-error">{{ t(errors[field]) }}</p>{% endif %}
+</div>
+{% endmacro %}
+
+{% block content %}
+<h1>🚚 {{ t('app_name') }}</h1>
+<p class="intro">{{ t('intro') }}</p>
+
+{% if errors %}<div class="alert" role="alert">{{ t('form_has_errors') }}</div>{% endif %}
+
+<form action="{{ url_for('predict_form') }}" method="post" novalidate>
+    <div class="form-group {{ 'has-error' if errors.get('distance_km') }}">
+        <label for="distance_km">{{ t('distance_km') }}</label>
+        <input type="number" id="distance_km" name="distance_km" min="{{ min_km }}" max="{{ max_km }}" step="0.1"
+               value="{{ values.get('distance_km', '') }}" placeholder="e.g. 25" required>
+        {% if errors.get('distance_km') %}<p class="field-error">{{ t(errors['distance_km'], min=min_km, max=max_km) }}</p>{% endif %}
+    </div>
+    <div class="form-row">
+        {{ choice('road_type') }}
+        {{ choice('traffic') }}
+        {{ choice('weather') }}
+        {{ choice('time_of_day') }}
+    </div>
+    {{ choice('package_size') }}
+    <button type="submit" class="button">{{ t('predict_button') }}</button>
+</form>
+{% endblock %}

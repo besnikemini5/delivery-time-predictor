@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block page_class %}wide{% endblock %}
+{% block content %}
+<h1>{{ t('model_title') }}</h1>
+<p class="intro">{{ t('model_intro', train=metrics.samples.train, test=metrics.samples.test) }}</p>
+
+<h2>{{ t('comparison_title') }}</h2>
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr><th>{{ t('col_model') }}</th><th>{{ t('col_mae') }}</th><th>{{ t('col_mape') }}</th><th>{{ t('col_r2') }}</th></tr>
+        </thead>
+        <tbody>
+            {% for name, m in metrics.comparison.items() %}
+            <tr class="{{ 'chosen' if name == metrics.model }}">
+                <td>{{ name }}{% if name == metrics.model %}<span class="tag">{{ t('chosen') }}</span>{% endif %}</td>
+                <td>{{ m.mae }}</td>
+                <td>{{ m.mape }}%</td>
+                <td>{{ m.r2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<p class="muted small" style="margin-top:12px">{{ t('coverage', coverage=metrics.range.test_coverage_percent) }}</p>
+
+<h2>{{ t('importance_title') }}</h2>
+{% for feature, share in metrics.feature_importance.items() %}
+<div class="bar">
+    <span>{{ t(feature) }}</span>
+    <span class="track"><span class="fill" style="width: {{ (share * 100)|round(1) }}%; display:block"></span></span>
+    <span class="value">{{ (share * 100)|round|int }}%</span>
+</div>
+{% endfor %}
+
+<p class="note">{{ t('data_note') }}</p>
+{% endblock %}

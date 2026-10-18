@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ t('app_name') }}{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</head>
+<body>
+    <div class="page {% block page_class %}{% endblock %}">
+        <header class="topbar">
+            <nav>
+                <a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint in ('index', 'predict_form') }}">{{ t('nav_predict') }}</a>
+                <a href="{{ url_for('model_info') }}" class="{{ 'active' if request.endpoint == 'model_info' }}">{{ t('nav_model') }}</a>
+            </nav>
+            <div class="controls">
+                <button type="button" class="icon-button" id="theme-toggle" aria-label="{{ t('theme_toggle') }}" title="{{ t('theme_toggle') }}">🌙</button>
+                <select id="language" aria-label="{{ t('language') }}">
+                    {% for code, name in languages.items() %}
+                    <option value="{{ code }}" {{ 'selected' if code == lang }}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </header>
+        <main class="card">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>
